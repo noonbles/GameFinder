@@ -1,7 +1,8 @@
 import discord
 import os
 from dotenv import load_dotenv
-load_dotenv()
+
+
 
 client = discord.Client()
 
@@ -20,5 +21,5 @@ async def on_ready():
     print("IT LIVES!!!")
     
 #[INITIALIZE]
-print(os.getenv('ROCK'))
+print(os)
 #client.run()
