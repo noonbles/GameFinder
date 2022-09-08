@@ -21,5 +21,4 @@ async def on_ready():
     print("IT LIVES!!!")
     
 #[INITIALIZE]
-print(os)
-#client.run()
+client.run(os.getenv('TOKEN'))
