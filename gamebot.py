@@ -1,12 +1,23 @@
 import discord
 import os
+from dotenv import load_dotenv
+load_dotenv()
+client = discord.Client()
 
 
-client = discord.client()
 
+
+
+#[EVENTS]
 @client.event
 async def on_message(msg):
     if msg.author == client.user:
         return
 
-client.run('MTAxNzUxOTExMTk5MzA1MzE4NA.G8bZuE.f_nK55X2gEwKZWBsDYz8051c1ePzGcPLwxjdwc')
+@client.event
+async def on_ready():
+    print("IT LIVES!!!")
+    
+#[INITIALIZE]
+print(os.getenv('THIS_EXISTS'))
+#client.run()
