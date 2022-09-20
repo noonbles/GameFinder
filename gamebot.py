@@ -33,5 +33,9 @@ async def on_message(msg):
     if cmd.hasCmd(m) and msg.channel.id == int(os.getenv('PREFERRED_CHANNEL')):
         await cmdfuncs[m.pop(0)](msg, m)
         
+@client.event
+async def on_ready():
+    await client.get_channel(int(os.getenv('PREFERRED_CHANNEL'))).send(os.getenv("OPENER"))
+        
 #[INITIALIZE]
 client.run(os.getenv('TOKEN'))
