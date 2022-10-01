@@ -1,41 +1,78 @@
 #[LIBRARIES]
 import discord
+from pretty_help import PrettyHelp
 import os
-import commandParser as cmd
 import backlogManager as bm
 import gameTrailers as gt
-import help as h #yes im this lazy
+from discord.ext import commands
 from hltb import searchGameInfo
 #from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-
 #[SET UP]
-load_dotenv()
-client = discord.Client()
-cmds = os.getenv('PHRASE').split(", ")
-    
-cmdfuncs = {        #basically a bastardized switch case; also a shit way to do it; dont hard code we shouldve automated
-    cmds[0]: searchGameInfo,
-    cmds[1]: bm.backlog,
-    cmds[2]: bm.add,
-    cmds[3]: bm.rmv,
-    cmds[4]: gt.search,
-    cmds[5]: h.help
-}
+intents = discord.Intents.default()
+intents.messages = True
 
-#[EVENTS]
-@client.event
-async def on_message(msg):
-    if msg.author == client.user:
-        return
-    m = cmd.getWords(msg.content)
-    if cmd.hasCmd(m) and msg.channel.id == int(os.getenv('PREFERRED_CHANNEL')):
-        await cmdfuncs[m.pop(0)](msg, m)
-        
-@client.event
+load_dotenv()
+
+bot = commands.Bot(
+    command_prefix='!', 
+    intents=intents, 
+    case_insensitive=True, 
+    help_command=PrettyHelp(no_category="Commands (Case Insensitive!)", show_index=False))
+    
+#[COMMANDS]
+
+@bot.command()
+async def find(ctx, *args):
+    """
+        Looks up how long to beat the game.
+    """
+    await searchGameInfo(ctx, *args)
+    
+@bot.command()
+async def search(ctx, *args): #this is redundant for now but idk how to supply them w/ preexisting funcs
+    """
+        Finds a game trailer for a video game.
+    """
+    await gt.search(ctx, *args)
+    
+@bot.command()
+async def list(ctx):
+    """
+        Lists the games that are in the backlog.
+    """
+    await bm.backlog(ctx)
+    
+@bot.command()
+async def add(ctx, *args):
+    """
+        Adds a game to the backlog.
+    """
+    await bm.add(ctx, *args)
+
+@bot.command()
+async def remove(ctx, *args):
+    """
+        Removes a game from the backlog.
+    """
+    await bm.rmv(ctx, *args)
+    
+
+    
+
+    
+# async def on_message(msg):
+#     if msg.author == client.user:
+#         return
+#     m = cmd.getWords(msg.content)
+#     if cmd.hasCmd(m) and msg.channel.id == int(os.getenv('PREFERRED_CHANNEL')):
+#         await cmdfuncs[m.pop(0)](msg, m)
+    
+#[EVENTS]    
+@bot.event
 async def on_ready():
-    await client.get_channel(int(os.getenv('PREFERRED_CHANNEL'))).send(os.getenv("OPENER"))
+    await bot.get_channel(int(os.getenv('PREFERRED_CHANNEL'))).send(os.getenv("OPENER"))
         
 #[INITIALIZE]
-client.run(os.getenv('TOKEN'))
+bot.run(os.getenv('TOKEN'))
