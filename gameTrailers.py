@@ -1,35 +1,44 @@
 import os
 import googleapiclient.discovery
 import sqlManager
+import cacheSystem
 from dotenv import load_dotenv
 
 load_dotenv()
 k = os.getenv('API_KEY')
 ytclient = googleapiclient.discovery.build("youtube", "v3", developerKey = k)
-sqlclient = sqlManager.Controller("cache")
 
-def cache(name):
-    #find name in sql server
-    vidId = sqlclient.customExecute("SELECT videoId from ") # finish this command tmrw 
-    if not sqlclient.isThere("title = " + "'" + name + "'") or not sqlclient.isThere("alias = " + "'" + name + "'"):
-        # case 1: none found? make entry.
-        sqlclient.insert()
-    else:
-        return 0
+# def cache(name):
+#     #find name in sql server
+#     vidId = sqlclient.customExecute(f"SELECT videoId from cache, aliases where alias={name}") # finish this command tmrw 
+#     if not sqlclient.isThere("title = " + "'" + name + "'") or not sqlclient.isThere("alias = " + "'" + name + "'"):
+#         # case 1: none found? make entry.
+#         sqlclient.insert()
+#     else:
+#         return 0
    
-    # case 2: found? 
-        #case 2.1: name = title or alias?
-            #if new alias add to entry
-    return 0
+#     # case 2: found? 
+#         #case 2.1: name = title or alias?
+#             #if new alias add to entry
+#     return 0
         
 
 async def search(ctx, *args):
-    req = ytclient.search().list(
-        part="snippet",
-        type='video',
-        q= " ".join(args) + " gameplay trailer",
-        maxResults=1,
-    )
-    res = req.execute()
-    #cache(args)
-    await ctx.send("https://www.youtube.com/watch?v=" + res['items'][0]['id']['videoId'])
+    str = ' '.join(args)
+    vidId = cacheSystem.cacheLookUp(' '.join(args))
+    link = "https://www.youtube.com/watch?v="
+    if(not vidId): #if its empty...
+        req = ytclient.search().list(
+            part="snippet",
+            type='video',
+            q= str + " gameplay trailer",
+            maxResults=1,
+        )
+        res = req.execute()
+        vidId = res['items'][0]['id']['videoId']
+        title = cacheSystem.getName(cacheSystem.getSearchResult(str), str) #this seems redundant and could probably be fixed up
+        cacheSystem.cacheInsert(str, title, vidId)
+        await ctx.send("i had to cache this please work")
+        await ctx.send(link + vidId)
+    else:
+        await ctx.send("had this cached!!! " + link + vidId[0][0])
