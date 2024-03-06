@@ -3,17 +3,17 @@ import discord
 from pretty_help import PrettyHelp
 import os
 import backlogManager as bm
-import gameTrailers as gt
+# import gameTrailers as gt
 from discord.ext import commands
 from hltb import searchGameInfo
 #from bs4 import BeautifulSoup
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 #[SET UP]
 intents = discord.Intents.default()
 intents.messages = True
 
-load_dotenv()
+# load_dotenv()
 
 bot = commands.Bot(
     command_prefix='!', 

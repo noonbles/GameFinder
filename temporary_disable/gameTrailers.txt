@@ -1,6 +1,5 @@
 import os
 import googleapiclient.discovery
-import sqlManager
 import cacheSystem
 from dotenv import load_dotenv
 
