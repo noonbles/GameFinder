@@ -7,7 +7,7 @@ import ChartComponent from "./BarChart";
 export default function ChartCarosel({ children }) {
   return (
     <div className="flex flex-col w-screen h-1/2 items-center justify-center">
-      <div className="flex h-full w-3/4 carousel rounded-box bg-gradient-to-r from-zinc-900 to-zinc-800 justify-center">
+      <div className="flex h-full w-3/4 carousel rounded-box bg-gradient-to-r from-base-100 to-base-200 justify-center">
         <div id="item1" className="carousel-item w-full">
           <ChartComponent />
         </div>
