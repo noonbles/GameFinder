@@ -7,7 +7,7 @@ export default function Home() {
 
       <div className="flex w-full h-1/2 bg-gradient-to-r from-zinc-900 to-zinc-800 card">
         <div className="card-body">
-          <h1 className="text-center text-9xl"> WHAT </h1>
+          <h1 className="text-center text-9xl"> how </h1>
         </div>
       </div>
       <ChartCarosel />
