@@ -1,7 +1,7 @@
 import React from "react";
 import ChartCarosel from "./components/chart-carosels";
 
-import { Bars3Icon } from "@heroicons/react/24/solid";
+import { Bars3Icon, SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
 export default function Home() {
   return (
@@ -14,6 +14,19 @@ export default function Home() {
         </div>
         <div className="flex-1">
           <a className="btn btn-ghost text-xl">GameFinder Dashboard</a>
+        </div>
+
+        <div className="flex">
+          <label className="swap swap-rotate">
+            {/* this hidden checkbox controls the state */}
+            <input
+              type="checkbox"
+              className="theme-controller"
+              value="light"
+            />
+            <SunIcon className="swap-off fill-current w-7 h-7"/>
+            <MoonIcon className="swap-on fill-current w-7 h-7"/> 
+          </label>
         </div>
       </div>
 
@@ -43,14 +56,16 @@ export default function Home() {
 
       <ChartCarosel />
 
-      <div className="flex w-screen justify-center items-center">
-        <div className="flex table w-1/2">
-          {[1, 2, 3, 4, 5, 6].map((e) => (
-            <tr className="h-10 bg-zinc-600" key={e}>
-              {e}
-            </tr>
-          ))}
-        </div>
+      <div className="flex justify-center items-center">
+        <table className="w-1/2">
+          <tbody>
+            {[1, 2, 3, 4, 5, 6].map((e) => (
+              <tr className="h-10" key={e}>
+                <td>{e}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
