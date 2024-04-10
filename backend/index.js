@@ -9,8 +9,8 @@ const port = 8000;
 
 //TODO: code cleanup jesus christ this is repetitive
 
-const url = "mongodb://localhost:27017/games";
-// const url = "mongodb://db:27017/Games"
+// const url = "mongodb://localhost:27017/games";
+const url = "mongodb://db:27017/games"
 
 mongoose
   .connect(url, {})
@@ -19,6 +19,7 @@ mongoose
 
 app.post("/add", async (req, res) => {
   try {
+    //TODO: check for dupes
     await new Game({ ...req.query }).save();
     res.sendStatus(200);
   } catch (err) {
@@ -28,6 +29,7 @@ app.post("/add", async (req, res) => {
 
 app.delete("/delete", async (req, res) => {
   try {
+    //TODO: check if exists before deleting
     await Game.deleteOne({ ...req.query });
     res.sendStatus(200);
   } catch (err) {

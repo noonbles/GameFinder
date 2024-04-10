@@ -14,8 +14,7 @@ intents.message_content = True
 
 load_dotenv()
 
-backend = "http://db:8000"
-# backend = "http://localhost:8000"
+backend = "http://backend:8000"
 
 bot = commands.Bot(
     command_prefix='!', 
@@ -61,14 +60,18 @@ async def delete(ctx, *args):
         params = {
             "name" : game.game_name,
         }
-        requests.delete(f"{backend}/delete", data=params) #we dont actually have an endpoint for this yet lol
-        await ctx.send(f'`{game.game_name}` has been added to the backlog.')
-
+        requests.delete(f"{backend}/delete", data=params)
+        await ctx.send(f'`{game.game_name}` has been deleted from the backlog.')
     except:
         await ctx.send('Game not found in backlog.')
+
 @bot.command()
 async def log(ctx):
     '''Shows the backlog'''
+    data = requests.get(f"{backend}/games").json()
+    # quick dirty way formatting
+    bldr = '\n'.join(f"{i+1}. {entry['name']}" for i, entry in enumerate(data))
+    await ctx.send(f"Here is the backlog: \n```yaml\n{bldr}```")
 
 
 @bot.command()
