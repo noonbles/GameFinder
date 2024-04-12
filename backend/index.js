@@ -1,27 +1,76 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const Game = require('./game.js')
+const express = require("express");
+const mongoose = require("mongoose");
+const Game = require("./game.js");
+const csv = require("csv-parser")
+const fs = require("fs").promises;
 
-const app = express()
-const port = 8000
+const app = express();
+const port = 8000;
 
-// const url = "mongodb://localhost:27017/games"
-const url = "mongodb://db:27017/Games"
+//TODO: code cleanup jesus christ this is repetitive
 
-mongoose.connect(url, {}).then(result => console.log("CONNECTED!")).catch(error => console.log(error))
+// const url = "mongodb://localhost:27017/games";
+const url = "mongodb://db:27017/games"
 
-app.post('/add', async (req, res) => {
-    console.log(req.query)
-    try{
-        await (new Game({...req.query})).save()
-        res.sendStatus(200)
-    }catch(err){
-        error(err)
-    }
-})
+mongoose
+  .connect(url, {})
+  .then((result) => console.log("CONNECTED!"))
+  .catch((error) => console.log(error));
 
-app.get('/games', async (req, res) => {
-    //TODO: add more endpoints 💀
-})
+async function exists(query){ //assumes query is a game object
+  return (await Game.find({...query})).length > 0
+}
 
-app.listen(port, () => { console.log("HOSTING...") })
+app.post("/add", async (req, res) => {
+  try {
+    if(!(await exists(req.query)))
+      await new Game({ ...req.query }).save();
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.delete("/delete", async (req, res) => {
+  try {
+    if(!(await exists(req.query)))
+      await Game.deleteOne({ ...req.query });
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/games", async (req, res) => {
+  try {
+    let data = await Game.find();
+    if (req.query.limit) data = data.slice(0, req.query.limit);
+    const stripped_data = data
+      .filter((e) => !e.completed)
+      .map((e) => ({ name: e.name, priority: e.priority }));
+    res.send(JSON.stringify(stripped_data));
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+function convertToCSV(data) {
+  return `${Object.keys(data[0]).join(',')}\n${data.map(entry => Object.values(entry).join(',')).join('\n')}`;
+}
+
+app.get("/export", async (req, res) => {
+  try {
+    const data = await Game.find();
+    const stripped_data = data.filter((e) => !e.completed).map((e) => ({ name: e.name, priority: e.priority }));
+    const file_path = "Backlog.csv";
+    await fs.writeFile(file_path, convertToCSV(stripped_data));
+    res.download(file_path, (err) => {err ? res.status(500).send("Error sending file") : fs.unlink(file_path, (err) => {err && console.error(err);}); });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.listen(port, () => {
+  console.log("HOSTING...");
+});

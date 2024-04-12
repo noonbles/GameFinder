@@ -14,8 +14,7 @@ intents.message_content = True
 
 load_dotenv()
 
-backend = "http://db:8000"
-# backend = "http://localhost:8000"
+backend = "http://backend:8000"
 
 bot = commands.Bot(
     command_prefix='!', 
@@ -61,14 +60,18 @@ async def delete(ctx, *args):
         params = {
             "name" : game.game_name,
         }
-        requests.delete(f"{backend}/delete", data=params) #we dont actually have an endpoint for this yet lol
-        await ctx.send(f'`{game.game_name}` has been added to the backlog.')
-
+        requests.delete(f"{backend}/delete", data=params)
+        await ctx.send(f'`{game.game_name}` has been deleted from the backlog.')
     except:
         await ctx.send('Game not found in backlog.')
+
 @bot.command()
 async def log(ctx):
     '''Shows the backlog'''
+    data = requests.get(f"{backend}/games").json()
+    # quick dirty way formatting
+    bldr = '\n'.join(f"{i+1}. {entry['name']}" for i, entry in enumerate(data))
+    await ctx.send(f"Here is the backlog: \n```yaml\n{bldr}```")
 
 
 @bot.command()
@@ -77,24 +80,23 @@ async def about(ctx, *args):
     try:
         print(ctx, *args)
         entry = await isThisAGame(args)
-        message = f'''\
-            ```yaml
-            {'='*40}
-            {'Game Name:':<20} {entry.game_name}
-            {'Alias:':<20} {entry.game_alias}
-            {'Type:':<20} {entry.game_type}
-            {'Review Score:':<20} {entry.review_score}
-            {'Developer:':<20} {entry.profile_dev}
-            {'Platforms:':<20} {', '.join(entry.profile_platforms)}
-            {'Release Year:':<20} {entry.release_world}
-            {'Similarity:':<20} {entry.similarity}
-            {'Main Story (Hours):':<20} {entry.main_story}
-            {'Main + Extra (Hours):':<20} {entry.main_extra}
-            {'Completionist (Hours):':<20} {entry.completionist}
-            {'All Styles (Hours):':<20} {entry.all_styles}
-            {'='*40}```
-            {entry.game_web_link}
-            '''
+        message = f'''
+```yaml\n{'='*40}
+{'Game Name:':<20} {entry.game_name}
+{'Alias:':<20} {entry.game_alias}
+{'Type:':<20} {entry.game_type}
+{'Review Score:':<20} {entry.review_score}
+{'Developer:':<20} {entry.profile_dev}
+{'Platforms:':<20} {', '.join(entry.profile_platforms)}
+{'Release Year:':<20} {entry.release_world}
+{'Similarity:':<20} {entry.similarity}
+{'Main Story (Hours):':<20} {entry.main_story}
+{'Main + Extra (Hours):':<20} {entry.main_extra}
+{'Completionist (Hours):':<20} {entry.completionist}
+{'All Styles (Hours):':<20} {entry.all_styles}
+{'='*40}```
+{entry.game_web_link}
+'''
         await ctx.send(message)
 
     except:
