@@ -17,10 +17,14 @@ mongoose
   .then((result) => console.log("CONNECTED!"))
   .catch((error) => console.log(error));
 
+async function exists(query){ //assumes query is a game object
+  return (await Game.find({...query})).length > 0
+}
+
 app.post("/add", async (req, res) => {
   try {
-    //TODO: check for dupes
-    await new Game({ ...req.query }).save();
+    if(!(await exists(req.query)))
+      await new Game({ ...req.query }).save();
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
@@ -29,8 +33,8 @@ app.post("/add", async (req, res) => {
 
 app.delete("/delete", async (req, res) => {
   try {
-    //TODO: check if exists before deleting
-    await Game.deleteOne({ ...req.query });
+    if(!(await exists(req.query)))
+      await Game.deleteOne({ ...req.query });
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
@@ -51,38 +55,17 @@ app.get("/games", async (req, res) => {
 });
 
 
-//we definitely need to clean up this code below later lmao
 function convertToCSV(data) {
-    let csv = '';
-    const headers = Object.keys(data[0]);
-    csv += headers.join(',') + '\n';
-    data.forEach(entry => {
-      const values = headers.map(header => entry[header]);
-      csv += values.join(',') + '\n';
-    });
-  
-    return csv;
-  }
+  return `${Object.keys(data[0]).join(',')}\n${data.map(entry => Object.values(entry).join(',')).join('\n')}`;
+}
 
 app.get("/export", async (req, res) => {
   try {
     const data = await Game.find();
-    const stripped_data = data
-      .filter((e) => !e.completed)
-      .map((e) => ({ name: e.name, priority: e.priority }));
+    const stripped_data = data.filter((e) => !e.completed).map((e) => ({ name: e.name, priority: e.priority }));
     const file_path = "Backlog.csv";
     await fs.writeFile(file_path, convertToCSV(stripped_data));
-    res.download(file_path, (err) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send("Error sending file");
-      }
-      fs.unlink(file_path, (err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-    });
+    res.download(file_path, (err) => {err ? res.status(500).send("Error sending file") : fs.unlink(file_path, (err) => {err && console.error(err);}); });
   } catch (err) {
     console.log(err);
   }
