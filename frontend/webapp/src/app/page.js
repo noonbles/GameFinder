@@ -1,6 +1,6 @@
 import React from "react";
 import ChartCarosel from "./components/chart-carosels";
-
+import Table from "./Table";
 import { Bars3Icon, SunIcon, MoonIcon, ArrowUpCircleIcon, ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 
 export default function Home() {
@@ -48,24 +48,13 @@ export default function Home() {
           <div className="stat place-items-center">
             <div className="stat-title">Status</div>
             <div className="stat-value">Off</div>
-            <div className="stat-desc">From January 1st to February 1st</div>
           </div>
         </div>
       </div>
 
       <ChartCarosel />
 
-      <div className="flex justify-center items-center">
-        <table className="table w-1/2">
-          <tbody>
-            {[1, 2, 3, 4, 5, 6].map((e) => (
-              <tr className="h-10" key={e}>
-                <td>{e}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <Table/>
     </div>
   );
 }

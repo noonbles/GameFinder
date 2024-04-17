@@ -1,4 +1,4 @@
-export const chartOptions = {
+export const chartBarOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -6,7 +6,7 @@ export const chartOptions = {
       },
       title: {
         display: true,
-        text: "Chart.js Bar Chart"
+        text: "Games Played Per Month"
       },
       scales: {
         x: {
@@ -26,3 +26,29 @@ export const chartOptions = {
       }
     }
   };
+
+export const chartDoughnutOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "bottom"
+    },
+    title: {
+      display: true,
+      text: "Completion Chart"
+    }
+  }
+}
+
+export const chartRadarOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "bottom"
+    },
+    title: {
+      display: true,
+      text: "Completion Chart"
+    }
+  }
+}

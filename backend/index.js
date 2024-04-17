@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Game = require("./game.js");
-const csv = require("csv-parser")
 const fs = require("fs").promises;
 
 const app = express();
@@ -9,12 +8,12 @@ const port = 8000;
 
 //TODO: code cleanup jesus christ this is repetitive
 
-// const url = "mongodb://localhost:27017/games";
-const url = "mongodb://db:27017/games"
+const url = "mongodb://localhost:27017/games";
+// const url = "mongodb://db:27017/games"
 
 mongoose
   .connect(url, {})
-  .then((result) => console.log("CONNECTED!"))
+  .then(() => console.log("CONNECTED!"))
   .catch((error) => console.log(error));
 
 async function exists(query){ //assumes query is a game object
