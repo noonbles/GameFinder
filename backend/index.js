@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Game = require("./game.js");
+const cors = require('cors')
 const fs = require("fs").promises;
 
 const app = express();
@@ -15,6 +16,8 @@ mongoose
   .connect(url, {})
   .then(() => console.log("CONNECTED!"))
   .catch((error) => console.log(error));
+
+app.use(cors())
 
 async function exists(query){ //assumes query is a game object
   return (await Game.find({...query})).length > 0
