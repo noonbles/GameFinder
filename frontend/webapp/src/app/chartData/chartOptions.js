@@ -29,6 +29,7 @@ export const chartBarOptions = {
 
 export const chartDoughnutOptions = {
   responsive: true,
+  borderWidth: 0,
   plugins: {
     legend: {
       position: "bottom"
@@ -42,13 +43,27 @@ export const chartDoughnutOptions = {
 
 export const chartRadarOptions = {
   responsive: true,
+  scales: {
+    r: {
+        angleLines: {
+            display: true
+        },
+        ticks: {
+          display: false
+        },
+        grid: {
+          color: "white"
+        }
+    }
+},
   plugins: {
     legend: {
-      position: "bottom"
+      position: "bottom",
+      textColor: "white",
     },
     title: {
       display: true,
       text: "Completion Chart"
-    }
+    },
   }
 }

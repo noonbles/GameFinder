@@ -21,7 +21,7 @@ export default function ChartCarosel({ children }) {
         </div>
       </div>
 
-      <div className="flex h-1/6 justify-center w-full py-2 gap-2">
+      <div className="flex h-1/7 justify-center w-full py-2 gap-2">
         <a href="#item1" className="btn btn-xs">
           1
         </a>

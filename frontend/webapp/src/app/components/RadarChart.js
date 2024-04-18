@@ -22,13 +22,13 @@ ChartJS.register(
 
 export default function RadarChart(data) {
   const chartData = {
-    labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "Thing 5", "Thing 6"],
+    labels: ["First Person Shooter", "Third Person Adventure", "Puzzle"],
     datasets: [
       {
-        label: "# of Votes",
-        data: [2, 9, 3, 5, 2, 3],
-        backgroundColor: "rgba(255, 255, 255, 0.2)",
-        borderColor: "rgba(255, 255, 255, 1)",
+        label: "Number of Games",
+        data: [2, 9, 3],
+        backgroundColor: "rgba(180, 230, 240, 0.2)",
+        borderColor: "rgba(180, 230, 240, 1)",
         borderWidth: 1,
       },
     ],

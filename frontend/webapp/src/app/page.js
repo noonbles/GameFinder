@@ -5,7 +5,7 @@ import { Bars3Icon, SunIcon, MoonIcon, ArrowUpCircleIcon, ArrowDownCircleIcon } 
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-10 h-screen w-screen bg-[url(../../imgs/site-bg.png)]">
+    <div className="flex flex-col gap-5 h-screen w-screen bg-[url(../../imgs/site-bg.png)]">
       <div id="menu" className="navbar bg-base-100 h-10">
         <div className="flex-none">
           <button className="btn btn-square btn-ghost">
