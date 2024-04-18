@@ -7,14 +7,16 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const data = {
     labels: [
-      'Completed',
-      'Not Completed'
+      'Not Completed',
+      'In Progress',
+      'Completed'
     ],
     datasets: [{
       label: 'Backlog',
-      data: [300, 50],
+      data: [300, 50, 30],
       backgroundColor: [
         'rgb(255, 99, 132)',
+        'rgb(244,192,0)',
         'rgb(54, 162, 235)',
       ],
       hoverOffset: 4

@@ -63,7 +63,7 @@ export const chartRadarOptions = {
     },
     title: {
       display: true,
-      text: "Completion Chart"
+      text: "Game Genre Distribution"
     },
   }
 }

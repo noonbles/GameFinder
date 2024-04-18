@@ -17,8 +17,16 @@ export default function Table() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex w-1/2 card bg-base-100 justify-center items-center">
+      <div className="flex w-1/2 card bg-base-200">
         <table className="table">
+          <thead>
+            <tr>
+              <th>Game</th>
+              <th>Average Hours Played</th>
+              <th>Progress</th>
+              <th>Review Score</th>
+            </tr>
+          </thead>
           <tbody>
             {!isLoading &&
               data?.slice(0, 5).map((e, index) => (
@@ -29,9 +37,7 @@ export default function Table() {
 
             {isLoading &&
               [1, 2, 3, 4, 5].map((e) => (
-                <tr className="h-10" key={e}>
-                  <div className="flex w-full h-full bg-" />
-                </tr>
+                <div className="flex w-full h-10 bg-" />
               ))}
           </tbody>
         </table>
