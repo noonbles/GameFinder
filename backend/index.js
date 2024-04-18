@@ -9,15 +9,17 @@ const port = 8000;
 
 //TODO: code cleanup jesus christ this is repetitive
 
-const url = "mongodb://localhost:27017/games";
-// const url = "mongodb://db:27017/games"
+// const url = "mongodb://localhost:27017/games";
+const url = "mongodb://db:27017/games"
+
+
+app.use(cors({origin: '*'}));
+
 
 mongoose
   .connect(url, {})
   .then(() => console.log("CONNECTED!"))
   .catch((error) => console.log(error));
-
-app.use(cors())
 
 async function exists(query){ //assumes query is a game object
   return (await Game.find({...query})).length > 0

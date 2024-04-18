@@ -3,7 +3,16 @@ import React from "react";
 import useSWR from "swr";
 
 export default function Table() {
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url, {
+    method: "GET",
+    headers: {
+        "Access-Control-Allow-Origin" : '*',
+        'Content-Type': 'application/json'
+    }
+  }).then((res) => {
+    console.log(res)
+    
+    return (res.json())});
   const { data, isLoading } = useSWR("http://localhost:8000/games", fetcher);
 
   return (
@@ -11,7 +20,7 @@ export default function Table() {
       <table className="table w-1/2">
         <tbody>
           {!isLoading &&
-            data.map((e, index) => (
+            data?.map((e, index) => (
               <tr className="h-10" key={e}>
                 <td>{`${index+1}. ${e.name}`}</td>
               </tr>
