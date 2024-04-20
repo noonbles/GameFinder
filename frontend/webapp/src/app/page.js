@@ -11,7 +11,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-5 h-screen w-screen bg-[url(../../imgs/site-bg.png)] dark:bg-[url(../../imgs/site-bg-lite.png)]">
+    <div className="flex flex-col gap-5 h-screen w-screen backgroundImg">
       <div id="menu" className="navbar bg-base-100 h-10">
         <div className="flex-none">
           <button className="btn btn-square btn-ghost">

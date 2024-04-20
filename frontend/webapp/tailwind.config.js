@@ -15,8 +15,22 @@ module.exports = {
     },
   },
   daisyui: {
-    darkTheme: "dark",
-    themes: ["dark", "light"]
+    themes: [
+      {
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+          ".backgroundImg": {
+            "@apply bg-[url(../../imgs/site-bg.png)]": "",
+          }
+        },
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          ".backgroundImg": {
+            "@apply bg-[url(../../imgs/site-bg-lite.png)]": "",
+          }
+        },
+      },
+    ],
   },
-  plugins: [require("daisyui")]
+  plugins: [require("daisyui")],
 };
