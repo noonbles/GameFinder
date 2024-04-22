@@ -24,6 +24,14 @@ mongoose
 async function exists(query){ //assumes query is a game object
   return (await Game.find({...query})).length > 0
 }
+app.get("/random", async (req, res) => {
+  try{
+    const randomGame = (await Game.aggregate([{ $sample: { size: 1 } }]))[0];
+    res.send(randomGame)
+  }catch (err){
+    console.log(err)
+  } 
+});
 
 app.post("/add", async (req, res) => {
   try {

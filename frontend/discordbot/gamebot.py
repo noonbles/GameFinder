@@ -7,6 +7,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from howlongtobeatpy import HowLongToBeat
 from ping import ping #heh this is ambiguous
+import random
 import threading
 
 pinger_thread = threading.Thread(target=ping)
@@ -75,7 +76,8 @@ async def log(ctx):
     '''Shows the backlog'''
     data = requests.get(f"{backend}/games").json()
     bldr = '\n'.join(f"{i+1}. {entry['name']}" for i, entry in enumerate(data))
-    await ctx.send(f"Here is the backlog: \n```yaml\n{bldr}```")
+    message = f"Here is the backlog: \n```yaml\n{bldr}```" if len(bldr) > 0 else "The backlog is empty."
+    await ctx.send(message)
 
 
 @bot.command()
@@ -105,6 +107,14 @@ async def about(ctx, *args):
 
     except:
         await ctx.send('Game not found on `HowLongToBeat.com`.')
+
+@bot.command()
+async def pick(ctx):
+    try:
+        data = requests.get(f"{backend}/random").json()
+        await ctx.send("The game I choose is..." + data['name'] + "!")
+    except:
+        await ctx.send("An error has occurred.")
 
     
 # #[EVENTS]    
