@@ -5,6 +5,8 @@ services:
     container_name: bot
     build:
       context: ./frontend/discordbot
+    ports:
+      - "9898:9898"
     depends_on:
       - backend
   # frontend:

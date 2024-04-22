@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Game = require("./game.js");
 const cors = require('cors')
 const fs = require("fs").promises;
+const pinger = require("./pinger.js");
 
 const app = express();
 const port = 8000;
@@ -11,7 +12,6 @@ const port = 8000;
 
 // const url = "mongodb://localhost:27017/games";
 const url = "mongodb://db:27017/games"
-
 
 app.use(cors({origin: '*'}));
 
@@ -74,6 +74,21 @@ app.get("/export", async (req, res) => {
     console.log(err);
   }
 });
+
+app.get("/uptime", async (req, res) => {
+  try {
+    pinger()
+    .then((value) => {
+        console.log('Received:', value);
+      res.send(JSON.stringify(new Date().getTime()/1000 - value));
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 app.listen(port, () => {
   console.log("HOSTING...");

@@ -6,6 +6,11 @@ import requests
 from discord.ext import commands
 from dotenv import load_dotenv
 from howlongtobeatpy import HowLongToBeat
+from ping import ping #heh this is ambiguous
+import threading
+
+pinger_thread = threading.Thread(target=ping)
+pinger_thread.start()
 
 #[SET UP]
 intents = discord.Intents.default()
@@ -69,7 +74,6 @@ async def delete(ctx, *args):
 async def log(ctx):
     '''Shows the backlog'''
     data = requests.get(f"{backend}/games").json()
-    # quick dirty way formatting
     bldr = '\n'.join(f"{i+1}. {entry['name']}" for i, entry in enumerate(data))
     await ctx.send(f"Here is the backlog: \n```yaml\n{bldr}```")
 
