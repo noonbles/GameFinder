@@ -10,7 +10,7 @@ export default function Home() {
       <Navbar />
       <BotStatus />
       <ChartCarosel />
-      <Table />
+      <Table/>
     </div>
   );
 }

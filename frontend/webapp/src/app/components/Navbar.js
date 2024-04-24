@@ -7,6 +7,7 @@ import {
   MoonIcon,
   
 } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
 export default function Navbar() {
   
@@ -18,18 +19,18 @@ export default function Navbar() {
           <summary className="btn btn-square btn-ghost"><Bars3Icon className="w-5 h-5" /></summary>
           <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <li>
-              <a>Item 1</a>
+              <Link href='/Backlog'>Backlog</Link>
             </li>
             <li>
-              <a>Item 2</a>
+              <Link href='/GameSelector'>Game Selector</Link>
             </li>
           </ul>
         </details>
       </div>
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">
+        <Link className="btn btn-ghost text-xl" href='/'>
           GameFinder
-        </a>
+        </Link>
       </div>
 
       <div className="flex">

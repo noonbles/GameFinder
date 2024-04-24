@@ -48,14 +48,18 @@ async def add(ctx, *args):
         game = await isThisAGame(args)
         params = {
             "name": game.game_name,
+            "image_url": game.game_image_url,
+            "web_link": game.game_web_link,
+            "review_score": game.review_score,
+            "game_type": game.game_type,
+            "average_hours": game.all_styles,
+            #TODO: add priority as an optional value
         }
         requests.post(f"{backend}/add", params=params)
         await ctx.send(f'`{game.game_name}` has been added to the backlog.')    
 
     except:
         await ctx.send('Game not found on `HowLongToBeat.com`.')
-        
-    #this is prone to error rn
         
 @bot.command()
 async def delete(ctx, *args):
@@ -110,6 +114,7 @@ async def about(ctx, *args):
 
 @bot.command()
 async def pick(ctx):
+    '''Selects a random game from the backlog'''
     try:
         data = requests.get(f"{backend}/random").json()
         await ctx.send("The game I choose is..." + data['name'] + "!")

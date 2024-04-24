@@ -57,10 +57,7 @@ app.get("/games", async (req, res) => {
   try {
     let data = await Game.find();
     if (req.query.limit) data = data.slice(0, req.query.limit);
-    const stripped_data = data
-      .filter((e) => !e.completed)
-      .map((e) => ({ name: e.name, priority: e.priority }));
-    res.send(JSON.stringify(stripped_data));
+    res.send(JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
