@@ -38,7 +38,7 @@ export default function Page() {
 
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
-    { field: "Name" },
+    { field: "Name", filter: true, flex: 2 },
     { field: "Date Added" },
     { field: "Review Score" },
     { field: "Average Play Time" },
@@ -49,7 +49,7 @@ export default function Page() {
       <Navbar />
 
       <div className="ag-theme-quartz flex justify-center h-full p-5">
-        <AgGridReact className="w-3/5" rowData={rowData} columnDefs={colDefs} />
+        <AgGridReact className="w-3/5" rowData={rowData} columnDefs={colDefs} pagination={true} rowSelection="single"/>
       </div>
     </div>
   );
