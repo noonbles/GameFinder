@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import {React, useEffect, useState} from "react";
 import {
   Bars3Icon,
   SunIcon,
@@ -10,6 +10,18 @@ import {
 import Link from "next/link";
 
 export default function Navbar() {
+
+  const [islight, setLight] = useState(null)
+
+  useEffect(() => {
+      const saved = JSON.parse(localStorage.getItem('islight'))
+      setLight(saved)
+  }, [])
+  useEffect(() => {
+    if(typeof islight == "boolean"){
+      localStorage.setItem('islight', JSON.stringify(islight));      
+    }
+  }, [islight])
   
 
   return (
@@ -35,7 +47,7 @@ export default function Navbar() {
 
       <div className="flex">
         <label className="swap swap-rotate">
-          <input type="checkbox" className="theme-controller" value="light" />
+          <input type="checkbox" className="theme-controller" checked={islight} value="light" onChange={() => setLight(!islight)}/>
           <SunIcon className="swap-off fill-current w-7 h-7" />
           <MoonIcon className="swap-on fill-current w-7 h-7" />
         </label>
