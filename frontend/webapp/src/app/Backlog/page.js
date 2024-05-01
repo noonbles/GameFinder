@@ -6,42 +6,34 @@ import { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
+import useSWR from "swr";
 
 //i think we might have to make a new table component for this one later 💀
 export default function Page() {
-  const [rowData, setRowData] = useState([
-    {
-      Name: "The Witcher 3: Wild Hunt",
-      "Date Added": "May 19, 2015", //might change this to mm-dd-yyyy honestly
-      "Review Score": 94,
-      "Average Play Time": 50.5,
-    },
-    {
-      Name: "Grand Theft Auto V",
-      "Date Added": "September 17, 2013",
-      "Review Score": 97,
-      "Average Play Time": 45.5,
-    },
-    {
-      Name: "Red Dead Redemption 2",
-      "Date Added": "October 26, 2018",
-      "Review Score": 97,
-      "Average Play Time": 60.2,
-    },
-    {
-      Name: "The Legend of Zelda: Breath of the Wild",
-      "Date Added": "March 3, 2017",
-      "Review Score": 97,
-      "Average Play Time": 50.0,
-    },
-  ]);
+  const fetcher = (url) =>
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+
+  const { data } = useSWR("http://localhost:8000/games", fetcher);
+  const [rowData, setRowData] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setRowData(data);
+    }
+  }, [data]);
 
   // Column Definitions: Defines the columns to be displayed.
-  const [colDefs, setColDefs] = useState([
-    { field: "Name", filter: true, flex: 2 },
-    { field: "Date Added" },
-    { field: "Review Score" },
-    { field: "Average Play Time" },
+  const [colDefs] = useState([
+    { headerName: "Name", field: "name", filter: true, flex: 2 },
+    { headerName: "Date Added", field: "date_added" },
+    { headerName: "Review Score", field: "review_score" },
+    { headerName: "Average Play Time", field: "average_hours" },
   ]);
 
   return (
@@ -49,7 +41,13 @@ export default function Page() {
       <Navbar />
 
       <div className="ag-theme-quartz flex justify-center h-full p-5">
-        <AgGridReact className="w-3/5" rowData={rowData} columnDefs={colDefs} pagination={true} rowSelection="single"/>
+        <AgGridReact
+          className="w-3/5"
+          rowData={rowData}
+          columnDefs={colDefs}
+          pagination={true}
+          rowSelection="single"
+        />
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ module.exports = function ping() {
         client.connect(port, host, () => {client.write('ping')});
 
         client.on('data', (data) => {
-            console.log(`Received: ${data}`);
+            // console.log(`Received: ${data}`);
             value = parseInt(data); // we r totally losing precision with this
             client.end();
             resolve(value)

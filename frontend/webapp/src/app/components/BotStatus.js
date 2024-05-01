@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-
+import { useState, useEffect } from "react";
 import {
   ArrowUpCircleIcon,
   ArrowDownCircleIcon,
@@ -23,6 +23,15 @@ export default function BotStatus() {
     });
   const { data } = useSWR("http://localhost:8000/uptime", fetcher);
 
+  const [date, setDate] = useState(new Date(0));
+  useEffect(() => {
+    if (data != undefined) {
+      const val = 1000 * (new Date() / 1000 - data);
+      console.log(val);
+      setDate(new Date(val));
+    }
+  }, [data]);
+
   return (
     <div
       id="status"
@@ -43,7 +52,7 @@ export default function BotStatus() {
               <span className="text-xs"> Status: Down </span>
             </div>
           )}
-          <div className="stat-desc">From January 1st to February 1st</div>
+          <div className="stat-desc">{`Since ${date}`}</div>
         </div>
       </div>
     </div>

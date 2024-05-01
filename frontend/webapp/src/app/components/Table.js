@@ -31,7 +31,8 @@ export default function Table({ rowCount, showCompleted }) {
             {!isLoading &&
               data?.slice(0, rowCount ?? 5).map((e, index) => (
                 <tr className="h-10" key={e}>
-                  <td>{`${index + 1}. ${e.name}`}</td>
+                  <td>
+                    <a href={e.web_link} className="hover:underline">{`${index + 1}. ${e.name}`}</a></td>
                   <td>{e.average_hours} Hours </td>
                   <td>{e.review_score}/100</td>
                   {showCompleted && (

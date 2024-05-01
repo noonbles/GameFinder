@@ -7,7 +7,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from howlongtobeatpy import HowLongToBeat
 from ping import ping #heh this is ambiguous
-import random
+from datetime import datetime
 import threading
 
 pinger_thread = threading.Thread(target=ping)
@@ -53,6 +53,7 @@ async def add(ctx, *args):
             "review_score": game.review_score,
             "game_type": game.game_type,
             "average_hours": game.all_styles,
+            "date_added": datetime.now().strftime("%m-%d-%Y")
             #TODO: add priority as an optional value
         }
         requests.post(f"{backend}/add", params=params)

@@ -10,11 +10,11 @@ def ping():
         server_socket.bind((host, port))
         server_socket.listen()
 
-        print(f"HOSTING ON PORT {port} USING HOST {host}")
+        # print(f"HOSTING ON PORT {port} USING HOST {host}")
 
         while True:
             client_socket, client_address = server_socket.accept()
-            print(f"{client_address} CONNECTED!")
+            # print(f"{client_address} CONNECTED!")
 
             data = client_socket.recv(1024).decode('utf-8')
             if data == "ping":
