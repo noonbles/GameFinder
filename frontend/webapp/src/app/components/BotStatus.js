@@ -27,7 +27,6 @@ export default function BotStatus() {
   useEffect(() => {
     if (data != undefined) {
       const val = 1000 * (new Date() / 1000 - data);
-      console.log(val);
       setDate(new Date(val));
     }
   }, [data]);

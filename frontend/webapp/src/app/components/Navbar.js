@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Navbar() {
 
-  const [islight, setLight] = useState(null)
+  const [islight, setLight] = useState(null);
 
   useEffect(() => {
       const saved = JSON.parse(localStorage.getItem('islight'))
