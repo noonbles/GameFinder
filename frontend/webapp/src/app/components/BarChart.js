@@ -22,9 +22,34 @@ ChartJS.register(
 );
 
 export default function ChartComponent({data}) {
+
+  const barData = {
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    datasets: [
+      {
+        label: "Games added",
+        data: data,
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+      },
+    ],
+  };
+
   return (
     <div className="flex w-full h-full justify-center items-center">
-      <Bar data={data} options={chartBarOptions} />
+      <Bar data={barData} options={chartBarOptions} />
     </div>
   );
 }

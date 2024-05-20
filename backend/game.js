@@ -10,7 +10,9 @@ const gameSchema = new mongoose.Schema({
     average_hours: {type: Number, default: 0},
     web_link: {type: String, default: ""},
     game_type: {type: String, default: ""},
-    date_added: {type: String, default: ""} //this somehow works better than date...
+    date_added: {type: String, default: ""},
+    date_started: {type: String, default: ""},
+    date_completed: {type: String, default: ""}
 })
 
 const Game = mongoose.model('Game', gameSchema);

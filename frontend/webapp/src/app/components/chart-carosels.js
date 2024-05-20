@@ -3,7 +3,7 @@
 import React from "react";
 import ChartComponent from "./BarChart";
 import PieChart from "./PieChart";
-import RadarChart from "./RadarChart";
+import GrowthChart from "./GrowthChart";
 import useSWR from "swr";
 
 export default function ChartCarosel() {
@@ -17,68 +17,22 @@ export default function ChartCarosel() {
     }).then((res) => res.json());
 
   const { data } = useSWR("http://localhost:8000/games", fetcher);
-  const barData = {
-    labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-    datasets: [
-      {
-        label: "Games added",
-        data: [8, 20, 6, 4, 3, 2],
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-      },
-    ],
-  };
-  const doughData = {
-    labels: ["Not Completed", "In Progress", "Completed"],
-    datasets: [
-      {
-        label: "Backlog",
-        data: [300, 50, 30],
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(244,192,0)",
-          "rgb(54, 162, 235)",
-        ],
-        hoverOffset: 4,
-      },
-    ],
-  };
-  const radarData = {
-    labels: ["First Person Shooter", "Third Person Adventure", "Puzzle"],
-    datasets: [
-      {
-        label: "Number of Games",
-        data: [2, 9, 3],
-        backgroundColor: "rgba(180, 230, 240, 0.2)",
-        borderColor: "rgba(180, 230, 240, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
+
+  function getMonth(date){ //mm-dd-yyyy
+    return date?.split("-")[0]
+  }
 
   return (
     <div className="flex flex-col w-screen h-1/2 items-center justify-center">
       <div className="flex h-full w-3/5 carousel rounded-box bg-gradient-to-r from-base-100 to-base-200 justify-center">
         <div id="item1" className="carousel-item w-full">
-          <ChartComponent data={barData} />
+          <ChartComponent data={data?.reduce((acc, e) => {acc[parseInt(getMonth(e.date_added)) - 1]++; return acc}, new Array(12).fill(0)) || new Array(12).fill(0)} />
         </div>
         <div id="item2" className="carousel-item w-full">
-          <PieChart data={doughData} />
+          <PieChart data={data?.reduce((acc, e) => {e.completed ? acc[2]++ : (e.in_progress ? acc[1]++ : acc[0]++); return acc}, [0,0,0]) || [0,0,0]} />
         </div>
         <div id="item3" className="carousel-item w-full">
-          <RadarChart data={radarData}/>
+          <GrowthChart data={Array.from({length: 12}, (_, i) => data?.filter(e => getMonth(e.date_added) === `${(i+1) < 10 ? '0' : ""}${i+1}`).length)}/>
         </div>
       </div>
 

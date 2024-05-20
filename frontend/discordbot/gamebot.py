@@ -30,7 +30,7 @@ bot = commands.Bot(
 
 async def isThisAGame(args):
     name = ' '.join(args).lower()
-    results_list = await HowLongToBeat().async_search(name)
+    results_list = await HowLongToBeat().async_search(name, similarity_case_sensitive = False)
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         return best_element
@@ -44,7 +44,6 @@ async def isThisAGame(args):
 async def add(ctx, *args):
     '''Adds a given game to the backlog.'''    
     try:
-        print(ctx, *args)
         game = await isThisAGame(args)
         params = {
             "name": game.game_name,
@@ -61,17 +60,46 @@ async def add(ctx, *args):
 
     except:
         await ctx.send('Game not found on `HowLongToBeat.com`.')
-        
+
+@bot.command()
+async def start(ctx, *args):
+    '''Marks a game as complete'''
+    try:
+        game = await isThisAGame(args)
+        params = {
+            "name" : game.game_name,
+            "in_progress" : "true",
+            "date_started" : datetime.now().strftime("%m-%d-%Y")
+        }
+        requests.put(f"{backend}/update", params=params)
+        await ctx.send(f'`{game.game_name}` has been started.')
+    except:
+        await ctx.send('Game not found in backlog.')
+
+@bot.command()
+async def finish(ctx, *args):
+    '''Marks a game as complete'''
+    try:
+        game = await isThisAGame(args)
+        params = {
+            "name" : game.game_name,
+            "completed" : "true",
+            "date_completed" : datetime.now().strftime("%m-%d-%Y")
+        }
+        requests.put(f"{backend}/update", params=params)
+        await ctx.send(f'`{game.game_name}` has been completed.')
+    except:
+        await ctx.send('Game not found in backlog.')
+
 @bot.command()
 async def delete(ctx, *args):
     '''Deletes a given game from the backlog'''
     try:
-        print(ctx, *args)
         game = await isThisAGame(args)
         params = {
             "name" : game.game_name,
         }
-        requests.delete(f"{backend}/delete", data=params)
+        requests.delete(f"{backend}/delete", params=params)
         await ctx.send(f'`{game.game_name}` has been deleted from the backlog.')
     except:
         await ctx.send('Game not found in backlog.')

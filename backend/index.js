@@ -24,6 +24,18 @@ mongoose
 async function exists(query){ //assumes query is a game object
   return (await Game.find({...query})).length > 0
 }
+
+async function handleEndpoint(req, res, exists, action) {
+  try {
+    if (exists) {
+      await action(req.query);
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 app.get("/random", async (req, res) => {
   try{
     const randomGame = (await Game.aggregate([{ $sample: { size: 1 } }]))[0];
@@ -34,35 +46,26 @@ app.get("/random", async (req, res) => {
 });
 
 app.post("/add", async (req, res) => {
-  try {
-    if(!(await exists(req.query)))
-      await new Game({ ...req.query }).save();
-    res.sendStatus(200);
-  } catch (err) {
-    console.log(err);
-  }
+  await handleEndpoint(req, res, (await exists(req.query)) === false, async query => await new Game({ ...query }).save());
 });
 
 app.delete("/delete", async (req, res) => {
-  try {
-    if(!(await exists(req.query)))
-      await Game.deleteOne({ ...req.query });
-    res.sendStatus(200);
-  } catch (err) {
-    console.log(err);
-  }
+  await handleEndpoint(req, res, (await exists(req.query)), async query => await Game.deleteOne({ ...query }));
 });
+
+app.put("/update", async (req, res) => {
+  await handleEndpoint(req, res, true, async query => await Game.updateOne({ name: query.name }, { ...query }));
+})
 
 app.get("/games", async (req, res) => {
   try {
-    let data = await Game.find();
-    if (req.query.limit) data = data.slice(0, req.query.limit);
-    res.send(JSON.stringify(data));
+    const limit = req.query.limit;
+    const data = await Game.find().limit(limit);
+    res.json(data);
   } catch (err) {
     console.log(err);
   }
 });
-
 
 function convertToCSV(data) {
   return `${Object.keys(data[0]).join(',')}\n${data.map(entry => Object.values(entry).join(',')).join('\n')}`;
