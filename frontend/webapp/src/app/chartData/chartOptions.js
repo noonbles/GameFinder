@@ -6,7 +6,7 @@ export const chartBarOptions = {
       },
       title: {
         display: true,
-        text: "Games Played Per Month"
+        text: "Games added to backlog per month"
       },
       scales: {
         x: {

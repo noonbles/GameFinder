@@ -20,22 +20,10 @@ ChartJS.register(
   Legend
 );
 
-export default function RadarChart(data) {
-  const chartData = {
-    labels: ["First Person Shooter", "Third Person Adventure", "Puzzle"],
-    datasets: [
-      {
-        label: "Number of Games",
-        data: [2, 9, 3],
-        backgroundColor: "rgba(180, 230, 240, 0.2)",
-        borderColor: "rgba(180, 230, 240, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
+export default function RadarChart({data}) {
   return (
     <div className="flex w-full h-full justify-center items-center">
-      <Radar data={chartData} options={chartRadarOptions} />
+      <Radar data={data} options={chartRadarOptions} />
     </div>
   );
 }

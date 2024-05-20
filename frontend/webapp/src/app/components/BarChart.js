@@ -21,22 +21,10 @@ ChartJS.register(
   Legend
 );
 
-export default function ChartComponent(data) {
-  //dummy data for now
-  const chartData = {
-    labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    datasets: [
-      {
-        label: "Games played",
-        data: [8, 20, 6, 4, 3, 2],
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-      },
-    ],
-  };
-
+export default function ChartComponent({data}) {
   return (
     <div className="flex w-full h-full justify-center items-center">
-      <Bar data={chartData} options={chartBarOptions} />
+      <Bar data={data} options={chartBarOptions} />
     </div>
   );
 }
