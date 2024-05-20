@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import useSWR from "swr";
+import Confetti from "react-confetti";
 
 export default function Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,7 +41,7 @@ export default function Page() {
   return (
     <div className="h-screen w-screen backgroundImg">
       <Navbar />
-
+      {!animating && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       <div className="flex flex-col h-full justify-center items-center gap-5">
         <div className="card w-96 bg-gradient-to-r from-base-100 to-base-200 shadow-xl">
           <figure className="w-full h-[36rem] overflow-hidden">
