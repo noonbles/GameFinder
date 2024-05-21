@@ -1,5 +1,5 @@
 import React from "react";
-import { chartOptions } from "../chartData/chartOptions";
+import { chartBarOptions } from "../chartData/chartOptions.js";
 import { Bar } from "react-chartjs-2";
 
 import {
@@ -21,27 +21,35 @@ ChartJS.register(
   Legend
 );
 
-export default function ChartComponent(data) {
-  //dummy data for now
-  const chartData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
+export default function ChartComponent({data}) {
+
+  const barData = {
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
     datasets: [
       {
-        label: "Sales",
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: "rgba(75, 192, 192, 0.7)",
-      },
-      {
-        label: "Expenses",
-        data: [8, 10, 6, 4, 3, 2],
+        label: "Games added",
+        data: data,
         backgroundColor: "rgba(255, 99, 132, 0.6)",
       },
     ],
   };
 
   return (
-    <div className="flex w-full h-full">
-      <Bar data={chartData} options={chartOptions} />
+    <div className="flex w-full h-full justify-center items-center">
+      <Bar data={barData} options={chartBarOptions} />
     </div>
   );
 }

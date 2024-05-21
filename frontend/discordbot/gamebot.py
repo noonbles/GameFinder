@@ -6,6 +6,12 @@ import requests
 from discord.ext import commands
 from dotenv import load_dotenv
 from howlongtobeatpy import HowLongToBeat
+from ping import ping #heh this is ambiguous
+from datetime import datetime
+import threading
+
+pinger_thread = threading.Thread(target=ping)
+pinger_thread.start()
 
 #[SET UP]
 intents = discord.Intents.default()
@@ -24,7 +30,7 @@ bot = commands.Bot(
 
 async def isThisAGame(args):
     name = ' '.join(args).lower()
-    results_list = await HowLongToBeat().async_search(name)
+    results_list = await HowLongToBeat().async_search(name, similarity_case_sensitive = False)
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         return best_element
@@ -38,29 +44,62 @@ async def isThisAGame(args):
 async def add(ctx, *args):
     '''Adds a given game to the backlog.'''    
     try:
-        print(ctx, *args)
         game = await isThisAGame(args)
         params = {
             "name": game.game_name,
+            "image_url": game.game_image_url,
+            "web_link": game.game_web_link,
+            "review_score": game.review_score,
+            "game_type": game.game_type,
+            "average_hours": game.all_styles,
+            "date_added": datetime.now().strftime("%m-%d-%Y")
+            #TODO: add priority as an optional value
         }
         requests.post(f"{backend}/add", params=params)
         await ctx.send(f'`{game.game_name}` has been added to the backlog.')    
 
     except:
         await ctx.send('Game not found on `HowLongToBeat.com`.')
-        
-    #this is prone to error rn
-        
+
+@bot.command()
+async def start(ctx, *args):
+    '''Marks a game as complete'''
+    try:
+        game = await isThisAGame(args)
+        params = {
+            "name" : game.game_name,
+            "in_progress" : "true",
+            "date_started" : datetime.now().strftime("%m-%d-%Y")
+        }
+        requests.put(f"{backend}/update", params=params)
+        await ctx.send(f'`{game.game_name}` has been started.')
+    except:
+        await ctx.send('Game not found in backlog.')
+
+@bot.command()
+async def finish(ctx, *args):
+    '''Marks a game as complete'''
+    try:
+        game = await isThisAGame(args)
+        params = {
+            "name" : game.game_name,
+            "completed" : "true",
+            "date_completed" : datetime.now().strftime("%m-%d-%Y")
+        }
+        requests.put(f"{backend}/update", params=params)
+        await ctx.send(f'`{game.game_name}` has been completed.')
+    except:
+        await ctx.send('Game not found in backlog.')
+
 @bot.command()
 async def delete(ctx, *args):
     '''Deletes a given game from the backlog'''
     try:
-        print(ctx, *args)
         game = await isThisAGame(args)
         params = {
             "name" : game.game_name,
         }
-        requests.delete(f"{backend}/delete", data=params)
+        requests.delete(f"{backend}/delete", params=params)
         await ctx.send(f'`{game.game_name}` has been deleted from the backlog.')
     except:
         await ctx.send('Game not found in backlog.')
@@ -69,9 +108,9 @@ async def delete(ctx, *args):
 async def log(ctx):
     '''Shows the backlog'''
     data = requests.get(f"{backend}/games").json()
-    # quick dirty way formatting
     bldr = '\n'.join(f"{i+1}. {entry['name']}" for i, entry in enumerate(data))
-    await ctx.send(f"Here is the backlog: \n```yaml\n{bldr}```")
+    message = f"Here is the backlog: \n```yaml\n{bldr}```" if len(bldr) > 0 else "The backlog is empty."
+    await ctx.send(message)
 
 
 @bot.command()
@@ -101,6 +140,15 @@ async def about(ctx, *args):
 
     except:
         await ctx.send('Game not found on `HowLongToBeat.com`.')
+
+@bot.command()
+async def pick(ctx):
+    '''Selects a random game from the backlog'''
+    try:
+        data = requests.get(f"{backend}/random").json()
+        await ctx.send("The game I choose is..." + data['name'] + "!")
+    except:
+        await ctx.send("An error has occurred.")
 
     
 # #[EVENTS]    

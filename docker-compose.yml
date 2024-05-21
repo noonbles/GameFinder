@@ -5,16 +5,18 @@ services:
     container_name: bot
     build:
       context: ./frontend/discordbot
-    depends_on:
-      - backend
-  frontend:
-    container_name: bot_frontend
-    build:
-      context: ./frontend/webapp
     ports:
-      - "3000:3000"
+      - "9898:9898"
     depends_on:
       - backend
+  # frontend:
+  #   container_name: bot_frontend
+  #   build:
+  #     context: ./frontend/webapp
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - backend
 
   backend:
     build:

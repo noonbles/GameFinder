@@ -1,4 +1,4 @@
-export const chartOptions = {
+export const chartBarOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -6,7 +6,7 @@ export const chartOptions = {
       },
       title: {
         display: true,
-        text: "Chart.js Bar Chart"
+        text: "Games added to backlog per month"
       },
       scales: {
         x: {
@@ -26,3 +26,44 @@ export const chartOptions = {
       }
     }
   };
+
+export const chartDoughnutOptions = {
+  responsive: true,
+  borderWidth: 0,
+  plugins: {
+    legend: {
+      position: "bottom"
+    },
+    title: {
+      display: true,
+      text: "Completion Chart"
+    }
+  }
+}
+
+export const chartRadarOptions = {
+  responsive: true,
+  scales: {
+    r: {
+        angleLines: {
+            display: true
+        },
+        ticks: {
+          display: false
+        },
+        grid: {
+          color: "white"
+        }
+    }
+},
+  plugins: {
+    legend: {
+      position: "bottom",
+      textColor: "white",
+    },
+    title: {
+      display: true,
+      text: "Game Genre Distribution"
+    },
+  }
+}

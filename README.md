@@ -1,3 +1,3 @@
 # GameFinder
 
-Made this bot to make finding games to play easier. I'll add more to the description when I feel like it.
+Made this bot to make finding games to play easier. There's a whole website that tracks games played and backlogged games too. There's lots of stuff. Tons.
