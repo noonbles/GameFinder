@@ -39,7 +39,9 @@ export default function BotStatus() {
       <div className="stats shadow">
         <div className="stat place-items-center">
           <div className="stat-title">Uptime</div>
-          <div className="stat-value">{parseInt(data) || 0} seconds</div>
+          <div className="stat-value">
+            <span className="truncate max-w-60 inline-block align-bottom">{parseInt(data) || 0}</span> seconds
+          </div>
           {data ? (
             <div className="flex flex-col justify-center items-center">
               <ArrowUpCircleIcon className="fill-green-500 h-5 w-5" />
