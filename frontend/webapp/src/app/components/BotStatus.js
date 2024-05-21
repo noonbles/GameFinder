@@ -24,12 +24,21 @@ export default function BotStatus() {
   const { data } = useSWR("http://localhost:8000/uptime", fetcher);
 
   const [date, setDate] = useState(new Date(0));
-  useEffect(() => {
-    if (data != undefined) {
+  const [seconds, setSeconds] = useState(parseInt(data) || 0);
+  useEffect(()=>{
+    let intervalId;
+    
+    if (data !== undefined) {
       const val = 1000 * (new Date() / 1000 - data);
       setDate(new Date(val));
+      setSeconds(parseInt(data));
+      intervalId = setInterval(() => {
+        setSeconds(prevSeconds => prevSeconds + 1);
+      }, 1000);
     }
-  }, [data]);
+    
+    return () => clearInterval(intervalId);
+  }, [data])
 
   return (
     <div
@@ -40,7 +49,7 @@ export default function BotStatus() {
         <div className="stat place-items-center">
           <div className="stat-title">Uptime</div>
           <div className="stat-value">
-            <span className="truncate max-w-60 inline-block align-bottom">{parseInt(data) || 0}</span> seconds
+            <span className="truncate max-w-60 inline-block align-bottom">{seconds}</span> seconds
           </div>
           {data ? (
             <div className="flex flex-col justify-center items-center">
